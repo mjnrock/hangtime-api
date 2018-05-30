@@ -62,3 +62,6 @@ typings/
 
 # JSHint
 .jshintrc
+
+# Hangtime Config
+config.js

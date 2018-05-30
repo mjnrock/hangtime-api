@@ -4,7 +4,7 @@
   "description": "The Hangtime API",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon api.js"
   },
   "repository": {
     "type": "git",
