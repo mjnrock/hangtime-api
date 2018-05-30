@@ -1,0 +1,26 @@
+{
+  "name": "hangtime-api",
+  "version": "1.0.0",
+  "description": "The Hangtime API",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjnrock/hangtime-api.git"
+  },
+  "author": "Matt Nawrocki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjnrock/hangtime-api/issues"
+  },
+  "homepage": "https://github.com/mjnrock/hangtime-api#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mssql": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
+  }
+}
