@@ -1,6 +1,6 @@
-const router = (app, config) => {
+const router = (app, Config) => {
 	app.get("/test", (req, res, next) => {
-		console.log(config);
+		console.log(Config);
 	});
 }
 

@@ -3,13 +3,13 @@ const app = express();
 const bodyParser = require("body-parser");
 const mssql = require("mssql");
 
-const config = require("./config");
-const router = require("./routes/router");
+const Config = require("./config");
+const Router = require("./routes/router");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-router(app, config);
+Router(app, Config);
 
-app.listen(config.Server.Port, () => {
-	console.log(`Hangtime server is now listening on port: ${config.Server.Port}`);
+app.listen(Config.Server.Port, () => {
+	console.log(`Hangtime server is now listening on port: ${Config.Server.Port}`);
 });
