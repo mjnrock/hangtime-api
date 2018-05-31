@@ -11,5 +11,5 @@ app.use(bodyParser.urlencoded({ extended: true }));
 Router(app, Config);
 
 app.listen(Config.Server.Port, () => {
-	console.log(`Hangtime server is now listening on port: ${Config.Server.Port}`);
+	console.log(`Hangtime API is now listening on port: ${Config.Server.Port}`);
 });
