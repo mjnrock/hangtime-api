@@ -1,16 +1,20 @@
 class RegEx {
 	constructor() {
 		this.Rules = {
+			TSQL: {
+				Default: /^DEFAULT$/i,
+				Null: /^NULL$/i
+			},
 			UUID: /^[A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12}$/i,
 			Numeric: {
-				Integer: /^[-+]?\d+$/g,
-				Real: /^([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.[0-9]*)?$/g,
-				Percent: /^100(\.0{0,2}?)?$|^\d{0,2}(\.\d{0,2})?$/g,
-				Latitude: /^-?([1-8]?[0-9]\.{1}\d{1,6}$|90\.{1}0{1,6}$)/g,
-				Longitude: /^-?((([1]?[0-7][0-9]|[1-9]?[0-9])\.{1}\d{1,6}$)|[1]?[1-8][0]\.{1}0{1,6}$)/g
+				Integer: /^[-+]?\d+$/,
+				Real: /^[-+]?([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.[0-9]*)?$/,
+				Percent: /^100(\.0{0,2}?)?$|^\d{0,2}(\.\d{0,2})?$/,
+				Latitude: /^-?([1-8]?[0-9]\.{1}\d{1,}$|90\.{1}0{1,}$)/,	// 6+ decimals, though allowed, is not physically realistic (i.e. millimeter precision)
+				Longitude: /^-?((([1]?[0-7][0-9]|[1-9]?[0-9])\.{1}\d{1,}$)|[1]?[1-8][0]\.{1}0{1,}$)/	// 6+ decimals, though allowed, is not physically realistic (i.e. millimeter precision)
 			},
 			Color: {
-				Hex: /^#(\d{6})|^#([A-F]{6})|^#([A-F]|[0-9]){6}/g
+				Hex: /^#(\d{6})|^#([A-F]{6})|^#([A-F]|[0-9]){6}/i
 			}
 		};
 	}
