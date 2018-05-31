@@ -1,6 +1,10 @@
 const sql = require('mssql');
 const RegEx = new (require("./RegEx"))();
 
+const Error = {
+	IsInvalid: "[Error]"
+};
+
 class TSQL {
 	constructor(config) {
 		this.Config = config;
@@ -67,16 +71,16 @@ class TSQL {
 		};
 	}
 
-	TVF(request, response, name, ...rest) {
+	TVF(req, res, name, ...rest) {
 		let para = this.Parameterize(rest);
 		
 		if(!RegEx.IsValid(...para.CheckSet)) {
-			return ERROR;
+			res.status(500).send({ message: Error.IsInvalid});
 		}
 
 		let query = `SELECT * FROM ${this.Config.DB.Database}.${this.Config.DB.Schema}.[${name}](${para.InputSet.join(",")});`;
 		
-		this.ConnectionPool(response, query, (results) => {
+		this.ConnectionPool(res, query, (results) => {
 			return results;
 		});
 	}

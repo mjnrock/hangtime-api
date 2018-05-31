@@ -9,11 +9,12 @@ const router = (app, Config) => {
 	});
 
 	//	http://localhost:3005/s/18E7D142-3545-4867-9011-3B539EA53845?p=42.778011&l=-83.266654&r=500
+	//	http://localhost:3005/s/18E7D142-3545-4867-9011-3B539EA53845?p=42.2411&l=-83.6130
 	app.get('/s/:activity', function (req, res) {
 		let activity = req.params.activity,
 			p = req.query.p,	//	Latitude (Phi)
 			l = req.query.l,	//	Longitude (Lambda)
-			r = req.query.r;	//	Radius (meters)
+			r = req.query.r || 16000;	//	Radius (meters)	[16000m ~= 10mi]
 			
 			//TODO Not an MVP feature
 			//	tags = req.query.t;
