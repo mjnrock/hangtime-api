@@ -53,12 +53,23 @@ class TSQL {
 
 		let InputSet = array.map((v, i) => {
 			if(v.length === 2) {
-				let s = "'".repeat(escapeDepth);
-				switch(v[1].toString()) {
-					case RegEx.Rules.UUID.toString():
-						return `${s}${v[0]}${s}`;
-					default:
-						return v[0];
+				let s = "'".repeat(escapeDepth),
+					lookup = [
+						RegEx.Rules.UUID.toString(),
+						RegEx.Rules.String.Alpha.toString(),
+						RegEx.Rules.String.AlphaSpace.toString(),
+						RegEx.Rules.String.AlphaNum.toString(),
+						RegEx.Rules.String.AlphaNumSpace.toString(),
+						RegEx.Rules.String.Upper.toString(),
+						RegEx.Rules.String.UpperSpace.toString(),
+						RegEx.Rules.String.Lower.toString(),
+						RegEx.Rules.String.LowerSpace.toString()
+					];
+					
+				if(lookup.includes(v[1].toString())) {
+					return `${s}${v[0]}${s}`;
+				} else {
+					return v[0];
 				}
 			}
 
@@ -80,6 +91,7 @@ class TSQL {
 
 		let query = `SELECT * FROM ${this.Config.DB.Database}.${this.Config.DB.Schema}.[${name}](${para.InputSet.join(",")});`;
 		
+		console.log(query);
 		this.ConnectionPool(res, query, (results) => {
 			return results;
 		});

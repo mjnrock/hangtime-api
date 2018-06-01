@@ -5,28 +5,35 @@ const router = (app, Config) => {
 	const TSQL = new (require("../helper/TSQL"))(Config);
 
 	app.get("/verify", (req, res, next) => {
-		TSQL.ConnectionPool(res, `SELECT GETDATE() AS 'Now'`);
+		TSQL.ConnectionPool(res, `SELECT SYSUTCDATETIME() AS 'Now'`);
 	});
 
-	//	http://localhost:3005/s/18E7D142-3545-4867-9011-3B539EA53845?p=42.778011&l=-83.266654&r=500
-	//	http://localhost:3005/s/18E7D142-3545-4867-9011-3B539EA53845?p=42.2411&l=-83.6130
-	app.get('/s/:activity', function (req, res) {
+	//	http://localhost:3005/s/{{ACTIVITY_UUID}}?p=42.778011&l=-83.266654&r=500
+	//	http://localhost:3005/s/{{ACTIVITY_UUID}}?p=42.2411&l=-83.6130
+	app.get('/game/:activity', function (req, res) {
 		let activity = req.params.activity,
 			p = req.query.p,	//	Latitude (Phi)
 			l = req.query.l,	//	Longitude (Lambda)
-			r = req.query.r || 16000;	//	Radius (meters)	[16000m ~= 10mi]
-			
-			//TODO Not an MVP feature
-			//	tags = req.query.t;
+			r = +req.query.r || 16000;	//	Radius (meters)	[16000m ~= 10mi]
+			//tags = req.query.t;	//TODO Not an MVP feature
 
-		TSQL.TVF(req, res, "GetProximateGames", 
+		TSQL.TVF(req, res, `GET.ProximateGames`,
 			[activity, RegEx.Rules.UUID],
-			[3, RegEx.Rules.Numeric.Integer],
 			[p, RegEx.Rules.Numeric.Latitude],
 			[l, RegEx.Rules.Numeric.Longitude],
 			[r, RegEx.Rules.Numeric.Real],
-			[TSQL.DataType.DEFAULT],
 			[TSQL.DataType.DEFAULT]
+		);
+	});
+	
+	app.get('/user/:input', function (req, res) {
+		let input = req.params.input,
+			it = +req.query.it || 1	//	Input Type (1: Username, 3: UUID)
+			s = +req.query.s || 0;		//	Switch (0: Basic, 1: Extended)
+
+		TSQL.TVF(req, res, `GET.${s === 1 ? "UserExtended" : "UserBasic"}`,
+			[input, it === 3 ? RegEx.Rules.UUID : RegEx.Rules.String.AlphaNum],
+			[it, RegEx.Rules.Numeric.Integer]
 		);
 	});
 };

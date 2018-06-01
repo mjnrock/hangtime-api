@@ -6,6 +6,16 @@ class RegEx {
 				Null: /^NULL$/i
 			},
 			UUID: /^[A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12}$/i,
+			String: {
+				Alpha: /^[a-zA-Z]{1,}$/i,
+				AlphaSpace: /^[a-zA-Z ]{1,}$/i,
+				AlphaNum: /^[a-zA-Z0-9]{1,}$/,
+				AlphaNumSpace: /^[a-zA-Z0-9 ]{1,}$/,
+				Upper: /^[A-Z]{1,}$/i,
+				UpperSpace: /^[A-Z ]{1,}$/i,
+				Lower: /^[a-z]{1,}$/i,
+				LowerSpace: /^[a-z ]{1,}$/i
+			},
 			Numeric: {
 				Integer: /^[-+]?\d+$/,
 				Real: /^[-+]?([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.[0-9]*)?$/,
