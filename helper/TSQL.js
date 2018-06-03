@@ -91,7 +91,7 @@ class TSQL {
 
 		let query = `SELECT * FROM ${this.Config.DB.Database}.${this.Config.DB.Schema}.[${name}](${para.InputSet.join(",")});`;
 		
-		console.log(query);
+		console.log(`[${Date.now()}]: Executed Query "${query}"`);
 		this.ConnectionPool(res, query, (results) => {
 			return results;
 		});

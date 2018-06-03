@@ -8,8 +8,8 @@ const router = (app, Config) => {
 		TSQL.ConnectionPool(res, `SELECT SYSUTCDATETIME() AS 'Now'`);
 	});
 
-	//	http://localhost:3005/s/{{ACTIVITY_UUID}}?p=42.778011&l=-83.266654&r=500
-	//	http://localhost:3005/s/{{ACTIVITY_UUID}}?p=42.2411&l=-83.6130
+	//	http://localhost:3005/game/{{ACTIVITY_UUID}}?p=42.778011&l=-83.266654&r=500
+	//	http://localhost:3005/game/{{ACTIVITY_UUID}}?p=42.2411&l=-83.6130
 	app.get('/game/:activity', function (req, res) {
 		let activity = req.params.activity,
 			p = req.query.p,	//	Latitude (Phi)
@@ -26,6 +26,7 @@ const router = (app, Config) => {
 		);
 	});
 	
+	//	http://localhost:3005/user/mrfancypants
 	app.get('/user/:input', function (req, res) {
 		let input = req.params.input,
 			it = +req.query.it || 1	//	Input Type (1: Username, 3: UUID)
