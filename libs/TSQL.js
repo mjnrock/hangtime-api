@@ -32,7 +32,7 @@ class TSQL {
 					rows = txrows;
 				}
 			}
-			
+
 			res.setHeader('Access-Control-Allow-Origin', '*');
 			res.status(200).send(rows);
 			sql.close();

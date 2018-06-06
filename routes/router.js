@@ -1,15 +1,15 @@
-const RegEx = new (require("../helper/RegEx"))();
+const RegEx = new (require("../libs/RegEx"))();
 const ERROR = -1;
 
 const router = (app, Config) => {
-	const TSQL = new (require("../helper/TSQL"))(Config);
+	const TSQL = new (require("../libs/TSQL"))(Config);
 
 	app.get("/verify", (req, res, next) => {
 		TSQL.ConnectionPool(res, `SELECT SYSUTCDATETIME() AS 'Now'`);
 	});
 
-	//	http://localhost:3005/game/{{ACTIVITY_UUID}}?p=42.778011&l=-83.266654&r=500
-	//	http://localhost:3005/game/{{ACTIVITY_UUID}}?p=42.2411&l=-83.6130
+	//	http://localhost:3005/game/basketball?p=42.778011&l=-83.266654&r=500
+	//	http://localhost:3005/game/basketball?p=42.2411&l=-83.6130
 	app.get('/game/:activity', function (req, res) {
 		let activity = req.params.activity,
 			p = req.query.p,	//	Latitude (Phi)
@@ -18,7 +18,7 @@ const router = (app, Config) => {
 			//tags = req.query.t;	//TODO Not an MVP feature
 
 		TSQL.TVF(req, res, `GET.ProximateGames`,
-			[activity, RegEx.Rules.UUID],
+			[activity, RegEx.Rules.String.AlphaNum],
 			[p, RegEx.Rules.Numeric.Latitude],
 			[l, RegEx.Rules.Numeric.Longitude],
 			[r, RegEx.Rules.Numeric.Real],
