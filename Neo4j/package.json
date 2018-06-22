@@ -4,7 +4,7 @@
   "description": "The Hangtime API",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon index.mjs"
   },
   "repository": {
     "type": "git",
@@ -18,9 +18,8 @@
   "homepage": "https://github.com/mjnrock/hangtime-api#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.3",
-    "mssql": "^4.1.0",
-    "tedious": "^2.2.4"
+    "esm": "^3.0.51",
+    "express": "^4.16.3"
   },
   "devDependencies": {
     "nodemon": "^1.17.5"

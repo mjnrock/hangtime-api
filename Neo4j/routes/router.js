@@ -1,42 +1,22 @@
-const RegEx = new (require("../libs/RegEx"))();
-const ERROR = -1;
+import MessageManager from './../ht/Message/MessageManager';
+import { ChildMessage } from './../ht/Message/ChildMessage';
 
-const router = (app, Config) => {
-	const TSQL = new (require("../libs/TSQL"))(Config);
-
-	app.get("/verify", (req, res, next) => {
-		TSQL.ConnectionPool(res, `SELECT SYSUTCDATETIME() AS 'Now'`);
-	});
-
-	//	http://localhost:3005/game/basketball?p=42.778011&l=-83.266654&r=500
-	//	http://localhost:3005/game/basketball?p=42.2411&l=-83.6130
-	app.get('/game/:activity', function (req, res) {
-		let activity = req.params.activity,
-			p = req.query.p,	//	Latitude (Phi)
-			l = req.query.l,	//	Longitude (Lambda)
-			r = +req.query.r || 16000;	//	Radius (meters)	[16000m ~= 10mi]
-			//tags = req.query.t;	//TODO Not an MVP feature
-
-		TSQL.TVF(req, res, `GET.ProximateGames`,
-			[activity, RegEx.Rules.String.AlphaNum],
-			[p, RegEx.Rules.Numeric.Latitude],
-			[l, RegEx.Rules.Numeric.Longitude],
-			[r, RegEx.Rules.Numeric.Real],
-			[TSQL.DataType.DEFAULT]
-		);
-	});
-	
-	//	http://localhost:3005/user/mrfancypants
+const router = (app) => {	
 	app.get('/user/:input', function (req, res) {
-		let input = req.params.input,
-			it = +req.query.it || 1	//	Input Type (1: Username, 3: UUID)
-			s = +req.query.s || 0;		//	Switch (0: Basic, 1: Extended)
+		let input = req.params.input;
+			// it = +req.query.it || 1	
+			// s = +req.query.s || 0;
 
-		TSQL.TVF(req, res, `GET.${s === 1 ? "UserExtended" : "UserBasic"}`,
-			[input, it === 3 ? RegEx.Rules.UUID : RegEx.Rules.String.AlphaNum],
-			[it, RegEx.Rules.Numeric.Integer]
-		);
+		(new ChildMessage()).Send(1);
+		(new ChildMessage()).Send(2);
+		(new ChildMessage()).Send(3);
+		(new ChildMessage()).Send(4);
+
+		MessageManager.GetInstance.Dispatch();
+
+		res.setHeader('Access-Control-Allow-Origin', '*');
+		res.status(200).send("cat");
 	});
 };
 
-module.exports = router;
+export default router;
