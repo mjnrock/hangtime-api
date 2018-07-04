@@ -1,13 +1,18 @@
 const express = require("express");
-const app = express();
 const bodyParser = require("body-parser");
+const neo4j = require("neo4j-driver").v1;
+
+const app = express();
+const PORT = 1337;
 
 import Router from "./routes/router.js";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-Router(app);
+Router(app, {
+	Neo4j: neo4j
+});
 
-app.listen(1337, () => {
-	console.log(`Hangtime API is now listening on port: 1337`);
+app.listen(PORT, () => {
+	console.log(`Hangtime Graph API is now listening on port: ${PORT}`);
 });
