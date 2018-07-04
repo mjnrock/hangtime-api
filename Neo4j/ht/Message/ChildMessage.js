@@ -1,7 +1,8 @@
 import { AMessage } from './AMessage';
+import MessageType from '../Enum/MessageType';
 
 export class ChildMessage extends AMessage {
 	constructor(recipient, payload) {
-		super("CHILD_MESSAGE", "Server", "Player");
+		super(MessageType.MESSAGE_A, "Server", "Player");
 	}
 }

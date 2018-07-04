@@ -11,17 +11,20 @@ class MessageManager {
 	}
 
 	Deliver(message) {
-		console.log(`[${Date.now()} | MessageManager.js | Deliver]: ${JSON.stringify(message)}`);
+		return `[${Date.now()} | MessageManager.js | Deliver]: ${JSON.stringify(message)}`;
 	}
 
 	//TODO Clearing this cache needs to be regulated by some resource-dependent governor, such that it doesn't block or hold
 	Dispatch() {
-		console.log(`[${Date.now()} | MessageManager.js | Dispatch]: ${this.Messages.length}`);
+		let comments = [];
+		comments.push(`[${Date.now()} | MessageManager.js | Dispatch]: ${this.Messages.length}`);
 		this.Messages.reverse();	// Probably expense at scale, come up with good way to cheaply (and accurately) forward loop
 		for (var i = this.Messages.length - 1; i >= 0; i--) {
-			this.Deliver(this.Messages[i]);
+			comments.push(this.Deliver(this.Messages[i]));
 			this.Messages.splice(i, 1);
 		}
+
+		return comments;
 	}
 }
 
