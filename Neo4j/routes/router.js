@@ -7,14 +7,16 @@ const router = (App, Drivers) => {
 	App.post("/feed/:feed/w", function (req, res) {
 		let feed = req.params.feed,
 			author = req.body.author,
-			payload = req.body.payload;
+			payload = req.body.payload,
+			timestamp = Date.now();
 
 		DB.SendJSON(...DB.Basic(res, "neo4j", "password", [
-			`MERGE (m:Message {Author: $author, Payload: $payload, Timestamp: TIMESTAMP()})`,
+			`MERGE (m:Message {Author: $author, Payload: $payload, Timestamp: toString($timestamp)})`,	// MERGE here with timestamp binding for pseudo idempotency
 			`RETURN m`
 		], {
 			author: author,
-			payload: payload
+			payload: payload,
+			timestamp: timestamp
 		}));
 	});
 	App.get("/feed/:feed/r", function (req, res) {
@@ -24,7 +26,8 @@ const router = (App, Drivers) => {
 		let Label = "Message";
 		DB.SendJSON(...DB.Basic(res, "neo4j", "password", [
 			`MATCH (m:${Label})`,
-			`RETURN m`
+			`RETURN m`,
+			`ORDER BY m.Timestamp ASC`
 		]));
 	});
 
