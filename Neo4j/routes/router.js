@@ -10,8 +10,9 @@ const router = (App, Drivers) => {
 			payload = req.body.payload,
 			timestamp = Date.now();
 
+		console.log(req.body);
 		DB.SendJSON(...DB.Basic(res, "neo4j", "password", [
-			`MERGE (m:Message {Author: $author, Payload: $payload, Timestamp: toString($timestamp)})`,	// MERGE here with timestamp binding for pseudo idempotency
+			`MERGE (m:Message {Author: $author, Payload: $payload, Timestamp: $timestamp})`,	// MERGE here with timestamp binding for pseudo idempotency
 			`RETURN m`
 		], {
 			author: author,

@@ -68,6 +68,10 @@ class Neo4j {
 			
 			if(cors === true) {
 				response.setHeader("Access-Control-Allow-Origin", "*");
+				response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+				response.setHeader("Access-Control-Allow-Credentials", false);
+				response.setHeader("Access-Control-Age", "86400");
+				response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
 			}
 			response.set("Content-Type", "Application/json");
 			response.status(200).send(result);
