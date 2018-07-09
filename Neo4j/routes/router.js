@@ -36,6 +36,20 @@ const router = (App, Drivers) => {
 		res.setHeader("Access-Control-Allow-Origin", "*");
 		res.status(200).send("This is a validation message from the Hangtime Graph API");
 	});
+
+	App.ws("/ws", function (ws, req) {
+		ws.on("open", function(msg) {
+			ws.send("Sup?");
+			console.log(msg);
+		});
+		ws.on("message", function(msg) {
+			ws.send("Sup?");
+			console.log(msg);
+		});
+		ws.on("close", function(msg) {
+			console.log(msg);
+		});
+	});
 };
 
 export default router;
