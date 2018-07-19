@@ -1,5 +1,5 @@
 const MessageType = {
-	MESSAGE_A: "BASE_VALUE"
+	GET: "GET"
 };
 
 export default MessageType;

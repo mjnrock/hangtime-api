@@ -28,6 +28,6 @@ class MessageManager {
 	}
 }
 
-MessageManager.GetInstance = new MessageManager();
+MessageManager.GetInstance = () => new MessageManager();
 
 export default MessageManager;

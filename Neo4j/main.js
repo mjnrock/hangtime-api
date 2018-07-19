@@ -1,11 +1,10 @@
 const express = require("express");
-const expressWS = require("express-ws");
 const bodyParser = require("body-parser");
 const neo4j = require("neo4j-driver").v1;
 const ws = require("ws");
 
 let app = express();
-expressWS(app);
+const expressWS = require("express-ws")(app);
 
 const PORT = 1337;
 
@@ -20,7 +19,7 @@ app.use(function(req, res, next) {
 });
 Router(app, {
 	Neo4j: neo4j,
-	WebSocket: ws
+	WebSocket: expressWS
 });
 
 app.listen(PORT, () => {

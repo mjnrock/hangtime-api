@@ -1,5 +1,7 @@
 import Neo4j from "./../ht/Helper/Neo4j";
 import Message from "./../ht/Message";
+import ConnectionManager from "./../ht/ConnectionManager";
+import { GetMessage } from './../ht/Message/GetMessage';
 
 const router = (App, Drivers) => {
 	const DB = new Neo4j(Drivers.Neo4j);
@@ -38,16 +40,16 @@ const router = (App, Drivers) => {
 	});
 
 	App.ws("/ws", function (ws, req) {
-		ws.on("open", function(msg) {
-			ws.send("Sup?");
-			console.log(msg);
+		ws.on("connection", function(conn) {
+			console.log(1234);
 		});
 		ws.on("message", function(msg) {
-			ws.send("Sup?");
-			console.log(msg);
+			//TODO	Have the Client WS messages send the API call in a serialized object and have this funtion
+			//TODO	(or make the call to that function from here) make the GET call and async the results back via ws.send()
+			// ws.send();
 		});
-		ws.on("close", function(msg) {
-			console.log(msg);
+		ws.on("close", function() {
+			
 		});
 	});
 };
