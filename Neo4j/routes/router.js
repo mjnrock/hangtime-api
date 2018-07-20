@@ -44,9 +44,54 @@ const router = (App, Drivers) => {
 			console.log(1234);
 		});
 		ws.on("message", function(msg) {
+			//!	Debugging
+			console.log(ws._socket.address());
+
 			//TODO	Have the Client WS messages send the API call in a serialized object and have this funtion
 			//TODO	(or make the call to that function from here) make the GET call and async the results back via ws.send()
-			// ws.send();
+			
+			const message = JSON.parse(msg);
+			switch(message.Type) {
+				case "INITIALIZE_FEED":
+
+					//! Make the `App.get("/feed/:feed/r")` call here
+					let Label = "Message";
+					let Response = DB.Basic(null, "neo4j", "password", [
+						`MATCH (m:${Label})`,
+						`RETURN m`,
+						`ORDER BY m.Timestamp ASC`
+					]);
+					Response[3].then(result => {
+						Response[0].close();
+			
+						result = result["records"].map((v, i) => {
+							// //! Being unfamiliar with Neo4j, I'm not sure when/why a query will return more than 1 set for the "_fields" array,
+							// //! but this preserves the return order if more than index 0 is needed
+							// let fields = {};
+							// v["_fields"].forEach((field, j) => {
+							// 	fields[j] = {
+							// 		Labels: field["labels"],
+							// 		Values: field["properties"]
+							// 	};
+							// });
+			
+							return {
+								Labels: v["_fields"][0]["labels"],
+								Values: v["_fields"][0]["properties"]
+							};
+						});
+						
+						Response[1].close();
+						ws.send(JSON.stringify({
+							Type: "INITIALIZE_FEED",
+							Payload: result
+						}));
+					});
+
+					break;
+				default:
+					break;
+			}
 		});
 		ws.on("close", function() {
 			
