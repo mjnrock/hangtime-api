@@ -44,11 +44,10 @@ const router = (App, Drivers) => {
 			console.log(1234);
 		});
 		ws.on("message", function(msg) {
+			//TODO Make sure that messages are sent to multiple clients if applicable (e.g. a Feed Post)
+
 			//!	Debugging
 			console.log(ws._socket.address());
-
-			//TODO	Have the Client WS messages send the API call in a serialized object and have this funtion
-			//TODO	(or make the call to that function from here) make the GET call and async the results back via ws.send()
 			
 			const message = JSON.parse(msg);
 			switch(message.Type) {
