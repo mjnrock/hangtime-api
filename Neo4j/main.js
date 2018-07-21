@@ -7,7 +7,7 @@ const app = expressWS.app;
 
 const PORT = 1337;
 
-import Router from "./routes/router.js";
+import Router from "./routes/Router";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -3,6 +3,7 @@ import MessageType from "../ht/Enum/MessageType";
 
 const DAILY_MILLISECONDS = 8.64e+7;
 
+//TODO This is still in Proof of Concept phase and needs to be substantially refactored into proper classes and imports and such
 const router = (App, Drivers) => {
 	const DB = new Neo4j(Drivers.Neo4j);
 	DB.SetWebSocketServer(Drivers.WebSocket.getWss());
