@@ -69,7 +69,6 @@ const router = (App, Drivers) => {
 
 
 function GETFeed(DB, feed, limit = 250) {
-	console.log(Date.now(), Date.now() - 8.64e+7);
 	return DB.Basic("neo4j", "password", [
 		`MATCH (m:Message)`,
 		`WHERE m.Timestamp >= ${Date.now() - 2 * DAILY_MILLISECONDS}`,		// Minus (exactly) 48 hours
