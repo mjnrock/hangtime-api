@@ -1,10 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const neo4j = require("neo4j-driver").v1;
-const ws = require("ws");
 
-let app = express();
-const expressWS = require("express-ws")(app);
+const expressWS = require("express-ws")(express());
+const app = expressWS.app;
 
 const PORT = 1337;
 

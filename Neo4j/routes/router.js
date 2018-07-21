@@ -5,6 +5,7 @@ const DAILY_MILLISECONDS = 8.64e+7;
 
 const router = (App, Drivers) => {
 	const DB = new Neo4j(Drivers.Neo4j);
+	DB.SetWebSocketServer(Drivers.WebSocket.getWss());
 
 	App.post("/feed/:feed/w", function (req, res) {
 		let feed = req.params.feed,
@@ -26,23 +27,24 @@ const router = (App, Drivers) => {
 		res.status(200).send("This is a validation message from the Hangtime Graph API");
 	});
 
-	App.ws("/ws", function (ws, req) {
-		ws.on("connection", function(conn) {});
-		ws.on("message", function(msg) {
-			//TODO This stuff absolutely needs to be offloaded to a Manager to help verify client sends (e.g. if A POSTs and B is online and in same group, send to A and B)
+	App.ws("/ws", function (client, req) {
+		client.on("connection", function(conn) {});
+		client.on("message", function(msg) {
+			//TODO This stuff absolutely needs to be offloaded to a ConnectionManager to help verify client sends (e.g. if A POSTs and B is online and in same group, send to A and B)
 			//TODO It also needs to be encapsulated in functions so that API landing points invoke a function instead
 			//TODO Make sure that messages are sent to multiple clients if applicable (e.g. a Feed Post)
 
 			const message = JSON.parse(msg);
 
 			//!	Debugging
-			console.log(ws._socket.address());			
+			console.log(client._socket.address());
+			console.log(client.clients);
 			console.log(message);
 
 			switch(message.Type) {
 				case MessageType.INITIALIZE_FEED:
 					//! Make the `App.get("/feed/:feed/r")` call here
-					DB.SendWS(ws, message.Type,
+					DB.SendWS(client, message.Type,
 						...GETFeed(DB,
 							message.Data.ID
 						)
@@ -50,7 +52,7 @@ const router = (App, Drivers) => {
 					break;
 				case MessageType.WRITE_POST_MESSAGE:
 					//! Make the `App.post("/feed/:feed/w")` call here
-					DB.SendWS(ws, message.Type,
+					DB.SendWS(client, message.Type,
 						...POSTFeedPost(DB,
 							message.Data.ID,
 							message.Data.Author,
@@ -63,7 +65,7 @@ const router = (App, Drivers) => {
 					break;
 			}
 		});
-		ws.on("close", function() {});
+		client.on("close", function() {});
 	});
 };
 

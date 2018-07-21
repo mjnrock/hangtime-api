@@ -1,5 +1,7 @@
 class Neo4j {
 	constructor(module) {
+		this.WebSocketServer = null;
+
 		this.SetProtocol("bolt");
 		this.SetServer("localhost");
 
@@ -20,6 +22,15 @@ class Neo4j {
 	}
 	SetServer(server) {
 		this.server = server;
+
+		return this;
+	}
+
+	GetWebSocketServer() {
+		return this.WebSocketServer;
+	}
+	SetWebSocketServer(wss) {
+		this.WebSocketServer = wss;
 
 		return this;
 	}
@@ -80,6 +91,7 @@ class Neo4j {
 		});
 	}
 
+	//? This should probably be moved to the ConnectionManager, so that state and connection status can be monitored and sent to appropriate clients
 	SendWS(ws, type, session, driver, result) {		
 		result.then(result => {
 			session.close();
@@ -92,10 +104,21 @@ class Neo4j {
 			});
 			
 			driver.close();
-			ws.send(JSON.stringify({
-				Type: type,
-				Payload: result
-			}));
+
+			//! To send to every Client
+			this.WebSocketServer.clients.forEach((client) => {
+				//TODO Discriminate which clients should actually receive this, as opposed to literally all
+				client.send(JSON.stringify({
+					Type: type,
+					Payload: result
+				}));
+			});
+
+			//! To send to the invoking client
+			// ws.send(JSON.stringify({
+			// 	Type: type,
+			// 	Payload: result
+			// }));
 		});
 	}
 }
