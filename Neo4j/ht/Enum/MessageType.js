@@ -1,5 +1,4 @@
-const MessageType = {
-	GET: "GET"
+export default {
+	INITIALIZE_FEED: "INITIALIZE_FEED",
+	WRITE_POST_MESSAGE: "WRITE_POST_MESSAGE"
 };
-
-export default MessageType;

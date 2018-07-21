@@ -37,15 +37,15 @@ class Neo4j {
 		return this;
 	}
 	
-	Basic(res, name, password, query, params = null) {
+	Basic(name, password, query, params = null) {
 		const driver = this.GetModule().driver(this.GetURL(), this.GetModule().auth.basic(name, password));
 		const session = driver.session();	
 		const result = session.run(Array.isArray(query) ? query.join(" ") : query, params);
 
-		return [session, driver, res, result];
+		return [session, driver, result];
 	}
 
-	SendJSON(session, driver, response, result, cors = true) {		
+	SendJSON(res, session, driver, result, cors = true) {		
 		result.then(result => {
 			session.close();
 
@@ -67,16 +67,35 @@ class Neo4j {
 			});
 			
 			if(cors === true) {
-				response.setHeader("Access-Control-Allow-Origin", "*");
-				response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-				response.setHeader("Access-Control-Allow-Credentials", false);
-				response.setHeader("Access-Control-Age", "86400");
-				response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
+				res.setHeader("Access-Control-Allow-Origin", "*");
+				res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+				res.setHeader("Access-Control-Allow-Credentials", false);
+				res.setHeader("Access-Control-Age", "86400");
+				res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
 			}
-			response.set("Content-Type", "Application/json");
-			response.status(200).send(result);
+			res.set("Content-Type", "Application/json");
+			res.status(200).send(result);
 			
 			driver.close();
+		});
+	}
+
+	SendWS(ws, type, session, driver, result) {		
+		result.then(result => {
+			session.close();
+
+			result = result["records"].map((v, i) => {
+				return {
+					Labels: v["_fields"][0]["labels"],
+					Values: v["_fields"][0]["properties"]
+				};
+			});
+			
+			driver.close();
+			ws.send(JSON.stringify({
+				Type: type,
+				Payload: result
+			}));
 		});
 	}
 }
