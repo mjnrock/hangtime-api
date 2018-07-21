@@ -44,6 +44,7 @@ const router = (App, Drivers) => {
 			switch(message.Type) {
 				case MessageType.INITIALIZE_FEED:
 					//! Make the `App.get("/feed/:feed/r")` call here
+					//TODO Offload the DB.SendWS to the ConnectionManager
 					DB.SendWS(client, message.Type,
 						...GETFeed(DB,
 							message.Data.ID
@@ -52,6 +53,7 @@ const router = (App, Drivers) => {
 					break;
 				case MessageType.WRITE_POST_MESSAGE:
 					//! Make the `App.post("/feed/:feed/w")` call here
+					//TODO Offload the DB.SendWS to the ConnectionManager
 					DB.SendWS(client, message.Type,
 						...POSTFeedPost(DB,
 							message.Data.ID,
@@ -69,7 +71,7 @@ const router = (App, Drivers) => {
 	});
 };
 
-
+//TODO Move this to a class so that the DB and/or Drivers can be readily passed to it
 function GETFeed(DB, feed, limit = 250) {
 	return DB.Basic("neo4j", "password", [
 		`MATCH (m:Message)`,
@@ -82,6 +84,7 @@ function GETFeed(DB, feed, limit = 250) {
 	});
 }
 
+//TODO Move this to a class so that the DB and/or Drivers can be readily passed to it
 function POSTFeedPost(DB, feed, author, payload, timestamp) {
 	return DB.Basic("neo4j", "password", [
 		`MERGE (m:Message {Author: $author, Payload: $payload, Timestamp: $timestamp})`,	// MERGE here with timestamp binding for pseudo idempotency
