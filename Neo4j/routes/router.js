@@ -20,7 +20,7 @@ const router = (App, Drivers) => {
 		let feed = req.params.feed,
 			l = +req.query.l || 50;	// Limit
 
-		DB.SendJSON(res, GETFeed(DB, feed, l));
+		DB.SendJSON(res, ...GETFeed(DB, feed, l));
 	});
 
 	App.get("/validate", function (req, res) {
